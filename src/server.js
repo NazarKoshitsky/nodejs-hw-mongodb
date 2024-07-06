@@ -2,7 +2,7 @@ import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import env from './utils/env.js';
+import { env } from './utils/env.js';
 import { getContacts, getContactById } from './services/contacts.js';
 
 const setupServer = () => {
@@ -21,7 +21,7 @@ const setupServer = () => {
   app.use(express.json());
 
   app.get('/', (req, res) => {
-    res.send('<h1>home page</h1>');
+    res.json('<h1>Home page</h1>');
   });
 
   app.get('/contacts', async (req, res) => {
