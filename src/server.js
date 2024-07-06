@@ -21,7 +21,7 @@ const setupServer = () => {
   app.use(express.json());
 
   app.get('/', (req, res) => {
-    res.json('<h1>Home page</h1>');
+    res.send('<h1>Home page</h1>');
   });
 
   app.get('/contacts', async (req, res) => {
@@ -29,7 +29,7 @@ const setupServer = () => {
     res.json({
       status: 200,
       message: 'Successfully found contacts!',
-      result,
+      data: result,
     });
   }),
     app.get('/contacts/:id', async (req, res) => {
