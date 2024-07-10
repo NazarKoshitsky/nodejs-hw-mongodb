@@ -1,11 +1,20 @@
 import { Contact } from '../db/models/Contact.js';
 
-export const getContacts = async () => {
-  const contacts = await Contact.find();
-  return contacts;
+export const getContacts = () => Contact.find();
+export const getContactById = (id) => Contact.findById(id);
+export const addContact = (data) => Contact.create(data);
+export const upsertContact = async (filter, data, options = {}) => {
+  const result = await Contact.findByIdAndUpdate(filter, data, {
+    new: true,
+    includeResultMetadata: true,
+    ...options,
+  });
+  if (!result || !result.value) return null;
+  const isNew = Boolean(result?.lastEroorObject?.upserted);
+  return {
+    data: result.value,
+    isNew,
+  };
 };
 
-export const getContactById = async (id) => {
-  const contact = await Contact.findById(id);
-  return contact;
-};
+export const deleteContact = (filter) => Contact.findOneAndDelete(filter);
