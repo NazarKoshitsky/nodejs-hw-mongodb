@@ -18,7 +18,7 @@ const setupServer = () => {
     },
   });
 
-  app.use(logger);
+  // app.use(logger);
   app.use(cors());
   app.use(express.json());
 
@@ -26,11 +26,6 @@ const setupServer = () => {
   app.use(notFoundHandler);
   app.use(errorHandler);
 
-  app.use((req, res) => {
-    res.status(404).json({
-      message: 'Not found',
-    });
-  });
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 };
 

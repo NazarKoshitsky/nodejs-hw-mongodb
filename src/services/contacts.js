@@ -1,49 +1,46 @@
 import { Contact } from '../db/models/Contact.js';
 import { fieldList, sortOrderList } from '../constants/constants.js';
+import { calcPaginationData } from '../utils/calcPaginationData.js';
 
 export const getContacts = async ({
-  filter = {},
-  page = 1,
-  perPage = 10,
+  filter,
+  page,
+  perPage,
   sortBy = fieldList[0],
   sortOrder = sortOrderList[0],
 }) => {
-  try {
-    const skip = (page - 1) * perPage;
-    const databaseQuery = Contact.find();
-
-    if (filter.type) {
-      databaseQuery.where('contactType').equals(filter.type);
-    }
-    if (filter.isFavourite !== undefined) {
-      databaseQuery.where('isFavourite').equals(filter.isFavourite);
-    }
-
-    const items = await databaseQuery
-      .skip(skip)
-      .limit(perPage)
-      .sort({ [sortBy]: sortOrder });
-
-    const totalItems = await Contact.find().countDocuments();
-
-    const totalPages = Math.ceil(totalItems / perPage);
-
-    const hasNextPage = page < totalPages;
-    const hasPreviousPage = page > 1;
-
-    return {
-      items,
-      totalItems,
-      page,
-      perPage,
-      totalPages,
-      hasPreviousPage,
-      hasNextPage,
-    };
-  } catch (error) {
-    console.error('Error in getContacts:', error);
-    throw error;
+  const skip = (page - 1) * perPage;
+  const dataBaseQuery = Contact.find();
+  if (filter.contactType) {
+    dataBaseQuery.where('contactType').equals(filter.contactType);
   }
+  if (filter.isFavourite) {
+    dataBaseQuery.where('isFavourite').equals(filter.isFavourite);
+  }
+
+  const totalContacts = await Contact.find()
+    .merge(dataBaseQuery)
+    .countDocuments();
+  const data = await dataBaseQuery
+    .skip(skip)
+    .limit(perPage)
+    .sort({ [sortBy]: sortOrder });
+
+  const { totalPages, hasNextPage, hasPreviousPage } = calcPaginationData({
+    total: totalContacts,
+    page,
+    perPage,
+  });
+
+  return {
+    data,
+    page,
+    perPage,
+    totalContacts,
+    totalPages,
+    hasNextPage,
+    hasPreviousPage,
+  };
 };
 
 export const getContactById = (id) => Contact.findById(id);
