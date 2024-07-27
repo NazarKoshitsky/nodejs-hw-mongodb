@@ -2,6 +2,8 @@ import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import authRouter from './routers/auth.js';
 import { env } from './utils/env.js';
 import { getContacts, getContactById } from './services/contacts.js';
 
@@ -18,11 +20,19 @@ const setupServer = () => {
 
   app.use(logger);
   app.use(cors());
+  app.use(cookieParser());
   app.use(express.json());
 
+<<<<<<< Updated upstream
   app.get('/', (req, res) => {
     res.send('<h1>Home page</h1>');
   });
+=======
+  app.use('/auth', authRouter);
+  app.use('/contacts', contactRouter);
+  app.use(notFoundHandler);
+  app.use(errorHandler);
+>>>>>>> Stashed changes
 
   app.get('/contacts', async (req, res) => {
     const result = await getContacts();
