@@ -25,22 +25,10 @@ const setupServer = () => {
   app.use(cookieParser());
   app.use(express.json());
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-  app.get('/', (req, res) => {
-    res.send('<h1>Home page</h1>');
-  });
-=======
   app.use('/auth', authRouter);
   app.use('/contacts', contactRouter);
   app.use(notFoundHandler);
   app.use(errorHandler);
->>>>>>> Stashed changes
-=======
-  app.use('/contacts', contactRouter);
-  app.use(notFoundHandler);
-  app.use(errorHandler);
->>>>>>> c4024ca720ec32d245e7faf6f80fb2eab6466de5
 
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 };
