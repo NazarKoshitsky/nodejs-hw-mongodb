@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose';
 import { setUpdateSettings, mongooseSaveError } from './hooks.js';
+import { emailRegex } from '../../constants/constants.js';
 
 const userSchema = new Schema(
   {
@@ -10,6 +11,7 @@ const userSchema = new Schema(
     email: {
       type: String,
       unique: true,
+      Match: emailRegex,
       required: true,
     },
     password: {

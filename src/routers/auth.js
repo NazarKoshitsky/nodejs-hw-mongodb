@@ -12,15 +12,15 @@ import { userSingupSchema, userSinginSchema } from '../validation/user.js';
 const authRouter = Router();
 
 authRouter.post(
-  '/auth/register',
+  '/register',
   validateBody(userSingupSchema),
   ctrlWrapper(registerUserController),
 );
 authRouter.post(
-  '/auth/login',
+  '/login',
   validateBody(userSinginSchema),
   ctrlWrapper(loginUserController),
 );
-authRouter.post('/auth/refresh', ctrlWrapper(refreshUserController));
-authRouter.post('/auth/logout', ctrlWrapper(singoutController));
+authRouter.post('/refresh', ctrlWrapper(refreshUserController));
+authRouter.post('/logout', ctrlWrapper(singoutController));
 export default authRouter;
