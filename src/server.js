@@ -5,7 +5,9 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import authRouter from './routers/auth.js';
 import { env } from './utils/env.js';
-import { getContacts, getContactById } from './services/contacts.js';
+import contactRouter from './routers/contacts.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import { errorHandler } from './middlewares/errorHandler.js';
 
 const setupServer = () => {
   dotenv.config();
@@ -18,11 +20,12 @@ const setupServer = () => {
     },
   });
 
-  app.use(logger);
+  // app.use(logger);
   app.use(cors());
   app.use(cookieParser());
   app.use(express.json());
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
   app.get('/', (req, res) => {
     res.send('<h1>Home page</h1>');
@@ -33,46 +36,12 @@ const setupServer = () => {
   app.use(notFoundHandler);
   app.use(errorHandler);
 >>>>>>> Stashed changes
+=======
+  app.use('/contacts', contactRouter);
+  app.use(notFoundHandler);
+  app.use(errorHandler);
+>>>>>>> c4024ca720ec32d245e7faf6f80fb2eab6466de5
 
-  app.get('/contacts', async (req, res) => {
-    const result = await getContacts();
-    res.json({
-      status: 200,
-      message: 'Successfully found contacts!',
-      data: result,
-    });
-  }),
-    app.get('/contacts/:id', async (req, res) => {
-      try {
-        const { id } = req.params;
-        const data = await getContactById(id);
-
-        if (!data) {
-          return res.status(404).json({
-            message: `Contact with id=${id} not found`,
-          });
-        }
-        res.json({
-          status: 200,
-          data,
-          message: `Contact with id=${id} find success`,
-        });
-      } catch (error) {
-        if (error.message.includes('Cast to ObjectId failed')) {
-          error.status = 404;
-        }
-        const { status = 500 } = error;
-        res.status(status).json({
-          message: error.message,
-        });
-      }
-    });
-
-  app.use((req, res) => {
-    res.status(404).json({
-      message: 'Not found',
-    });
-  });
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 };
 
