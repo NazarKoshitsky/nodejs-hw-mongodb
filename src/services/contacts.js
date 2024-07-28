@@ -46,10 +46,10 @@ export const getContacts = async ({
   };
 };
 
-export const getContactById = (id) => Contact.findById(id);
+export const getContactById = (id) => Contact.findOne(id);
 export const addContact = (data) => Contact.create(data);
 export const upsertContact = async (filter, data, options = {}) => {
-  const result = await Contact.findByIdAndUpdate(filter, data, {
+  const result = await Contact.findOneAndUpdate(filter, data, {
     new: true,
     includeResultMetadata: true,
     ...options,
